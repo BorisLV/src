@@ -18,6 +18,7 @@ class CompareCB
 class SleepWakeupInvoke
 {
     private array $users;
+    private $file;
 
     public function __construct(array $users)
     {
@@ -50,9 +51,13 @@ class SleepWakeupInvoke
 
     public function __sleep()
     {
-        
+        return ['users'];
     }
 
+    public function __wakeup()
+    {
+
+    }
 }
 
 $users = [
