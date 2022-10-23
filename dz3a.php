@@ -48,7 +48,7 @@ class SleepWakeupInvoke
         echo "Sort by " . $key . ":" . PHP_EOL;
         usort($this->users, new CompareCB($key));
     }
-//просто для метода __wakeup при unserialize создается файлхэндлер
+//просто показать что для метода __wakeup при unserialize можно открыть соездинение к БД или к файлу
     private function openFile($filename)
     {
         $this->fh = fopen($filename,"a+");
@@ -78,6 +78,7 @@ $usersObj->getUsers();
 $a = serialize($usersObj);
 var_dump($a);
 $usersObj = unserialize($a);
+$usersObj->getUsers();
 
 
 
