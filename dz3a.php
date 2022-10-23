@@ -1,4 +1,5 @@
 <?php
+
 class CompareCB
 {
     protected string $key;
@@ -14,20 +15,58 @@ class CompareCB
     }
 }
 
+class SleepWakeupInvoke
+{
+    private array $users;
+
+    public function __construct(array $users)
+    {
+        $this->setUsers($users);
+    }
+
+    /**
+     * @return array
+     */
+    public function getUsers(): array
+    {
+        foreach ($this->users as $user)
+            echo $user['name'] . " weight " . $user['weight'] . PHP_EOL;
+        return $this->users;
+    }
+
+    /**
+     * @param array $users
+     */
+    public function setUsers(array $users): void
+    {
+        $this->users = $users;
+    }
+
+    public function sortMe($key)
+    {
+        echo "Sort by " . $key . ":" . PHP_EOL;
+        usort($this->users, new CompareCB($key));
+    }
+
+    public function __sleep()
+    {
+        
+    }
+
+}
+
 $users = [
     ['name' => 'Petrov', 'weight' => 102],
     ['name' => 'Ivanov', 'weight' => 95],
     ['name' => 'Sidorov', 'weight' => 101]
 ];
 
-echo "сортировка по имени: " . PHP_EOL;
-usort($users, new CompareCB('name'));
+$usersObj = new SleepWakeupInvoke($users);
+$usersObj->sortMe('name');
+$usersObj->getUsers();
+$usersObj->sortMe('weight');
+$usersObj->getUsers();
 
-foreach ($users as $user)
-    echo $user['name'] . " weight " . $user['weight'] . PHP_EOL;
 
-echo "сортировка по весу: " . PHP_EOL;
-usort($users, new CompareCB('weight'));
 
-foreach ($users as $user)
-    echo $user['name'] . " weight " . $user['weight'] . PHP_EOL;
+
