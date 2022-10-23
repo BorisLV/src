@@ -18,7 +18,7 @@ class CompareCB
 class SleepWakeupInvoke
 {
     private array $users;
-    private $file;
+    private $fh;
 
     public function __construct(array $users)
     {
@@ -48,7 +48,11 @@ class SleepWakeupInvoke
         echo "Sort by " . $key . ":" . PHP_EOL;
         usort($this->users, new CompareCB($key));
     }
-
+//просто для метода __wakeup при unserialize создается файлхэндлер
+    private function openFile($filename)
+    {
+        $this->fh = fopen($filename,"a+");
+    }
     public function __sleep()
     {
         return ['users'];
@@ -56,7 +60,7 @@ class SleepWakeupInvoke
 
     public function __wakeup()
     {
-
+        $this->openFile("test.txt");
     }
 }
 
@@ -71,7 +75,9 @@ $usersObj->sortMe('name');
 $usersObj->getUsers();
 $usersObj->sortMe('weight');
 $usersObj->getUsers();
-
+$a = serialize($usersObj);
+var_dump($a);
+$usersObj = unserialize($a);
 
 
 
